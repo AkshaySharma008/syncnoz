@@ -10,10 +10,10 @@ import {
   getAllEventsFromLocalStorage,
 } from "../../utils/localStorage.utils";
 
-const Calendar = () => {
+const CalendarBody = () => {
   const [events, setEvents] = useState(() => {
     const storedEvents = getAllEventsFromLocalStorage();
-    return storedEvents ? JSON.parse(storedEvents) : [];
+    return storedEvents ? storedEvents : [];
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,8 +36,16 @@ const Calendar = () => {
   }, []);
 
   const handleEventClick = useCallback((clickInfo) => {
-    setCurrentEvent(clickInfo.event);
-    setEventTitle(clickInfo.event.title);
+    const { id, title, start, end, allDay } = clickInfo.event;
+
+    // Avoid passing complex event object directly
+    setCurrentEvent({
+      id,
+      start,
+      end,
+      allDay,
+    });
+    setEventTitle(title);
     setIsModalOpen(true); // Show the modal
   }, []);
 
@@ -71,10 +79,13 @@ const Calendar = () => {
   };
 
   return (
-    <div className="App">
-      <h2>SyncNoz Event Calendar</h2>
-
+    <>
       <FullCalendar
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        }}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         selectable={true}
@@ -94,8 +105,8 @@ const Calendar = () => {
         closeModal={closeModal}
         setEventTitle={setEventTitle}
       />
-    </div>
+    </>
   );
 };
 
-export default Calendar;
+export default CalendarBody;
