@@ -3,8 +3,8 @@ import "./styles.css";
 import Modal from "../Modal";
 import CustomCheckbox from "../CustomCheckbox";
 import CustomSelect from "../CustomSelect";
+import { EVENT_CATEGORIES } from "../../constants";
 
-const categories = ["Work", "Personal", "Fitness", "Shopping"];
 const DefaultEventData = {
   title: "",
   id: "",
@@ -110,7 +110,7 @@ const EventsModal = ({
           </div>
         </div>
         <CustomSelect
-          options={categories}
+          options={EVENT_CATEGORIES}
           value={eventData.extendedProps.category}
           onChange={(value) =>
             handleInputOnChange("extendedProps.category", value)

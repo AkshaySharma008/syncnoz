@@ -10,6 +10,7 @@ import {
 } from "../../utils/localStorage.utils";
 import Header from "../Header";
 import EventsModal from "../EventsModal";
+import CustomEvent from "../CustomEvent";
 
 const CalendarBody = () => {
   const calendarRef = useRef(null);
@@ -120,6 +121,9 @@ const CalendarBody = () => {
         longPressDelay={1}
         eventDrop={handleEventDrop}
         displayEventTime={true}
+        eventContent={(eventInfo) => (
+          <CustomEvent customEvent={eventInfo.event} />
+        )} // Custom rendering of events
       />
 
       <EventsModal
