@@ -4,17 +4,10 @@ import Modal from "../Modal";
 import CustomCheckbox from "../CustomCheckbox";
 import CustomSelect from "../CustomSelect";
 import { EVENT_CATEGORIES } from "../../constants";
-
-const DefaultEventData = {
-  title: "",
-  id: "",
-  start: "",
-  end: "",
-  extendedProps: {
-    reminder: false,
-    category: "",
-  },
-};
+import { formatToISOWithMidnightOffset } from "../../utils/dateFormat.utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { DEFAULT_EVENT_DATA } from "../../constants";
 
 const EventsModal = ({
   isOpen,
@@ -23,11 +16,19 @@ const EventsModal = ({
   handleDeleteEvent,
   handleSaveEvent,
 }) => {
-  const [eventData, setEventData] = useState(DefaultEventData);
+  const [eventData, setEventData] = useState(DEFAULT_EVENT_DATA);
 
   useEffect(() => {
     if (eventInfo) {
-      setEventData(eventInfo);
+      if (eventInfo.allDay) {
+        setEventData({
+          ...eventInfo,
+          start: formatToISOWithMidnightOffset(eventInfo.start),
+          end: formatToISOWithMidnightOffset(eventInfo.start, true),
+        });
+      } else {
+        setEventData(eventInfo);
+      }
     }
   }, [eventInfo]);
 
@@ -124,15 +125,20 @@ const EventsModal = ({
           }
         />
         <div className="modal-actions">
-          {/* {currentEvent && currentEvent.title && (
-            <button onClick={handleDeleteEvent}>Delete</button>
-          )} */}
-          <button onClick={onClose} className="btn btn-secondary">
-            Cancel
-          </button>
-          <button onClick={handleSave} className="btn btn-primary">
-            Save
-          </button>
+          {eventData && eventData.id && (
+            <button onClick={handleDeleteEvent} className="btn btn-warning">
+              <FontAwesomeIcon icon={faTrashAlt} size="sm" color="red" /> Delete
+            </button>
+          )}
+
+          <div className="modal-right-action">
+            <button onClick={onClose} className="btn btn-secondary">
+              Cancel
+            </button>
+            <button onClick={handleSave} className="btn btn-primary">
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </Modal>

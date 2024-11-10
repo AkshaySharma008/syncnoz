@@ -5,7 +5,7 @@ const useEventReminders = (events) => {
     const now = new Date();
     events.forEach((event) => {
       const eventStart = new Date(event.start);
-      const reminderTime = new Date(eventStart.getTime() - 5 * 60000); // 5 min before
+      const reminderTime = new Date(eventStart.getTime() - 1 * 60000); // 1 min before
 
       // If the reminder time is less than the current time, trigger the reminder
       if (now >= reminderTime && now <= eventStart) {

@@ -1,4 +1,4 @@
-const LOCAL_STORAGE_KEY = "syncNozEvents";
+import { LOCAL_STORAGE_KEY } from "../constants";
 
 export const saveEventsToLocalStorage = (events) => {
   // Extract only serializable properties of each event
