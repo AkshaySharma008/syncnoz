@@ -27,8 +27,12 @@ const EventsModal = ({
         </h3>
         <input
           type="text"
-          value={eventTitle}
-          onChange={(e) => setEventTitle(e.target.value)}
+          name="title"
+          value={newEvent.title}
+          onChange={(e) => {
+            handleInputChange(e);
+            setEventTitle(e.target.value);
+          }}
           placeholder="Enter event title"
         />
         {showDatesInput && (
