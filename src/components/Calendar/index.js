@@ -4,13 +4,12 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "./styles.css";
-import CalenderModal from "../molecules/CalenderModal";
 import {
   saveEventsToLocalStorage,
   getAllEventsFromLocalStorage,
 } from "../../utils/localStorage.utils";
 import Header from "../Header";
-import CustomEventModal from "../molecules/CustomEventModal";
+import EventsModal from "../molecules/EventsModal";
 
 const CalendarBody = () => {
   const calendarRef = useRef(null);
@@ -22,14 +21,14 @@ const CalendarBody = () => {
   const [currentEvent, setCurrentEvent] = useState(null);
   const [eventTitle, setEventTitle] = useState("");
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
+  const [isEventsModalOpen, setIsEventsModalOpen] = useState(false);
+  const [showDatesInputs, setShowDatesInputs] = useState(false);
 
-  const [isCalenderOpen, setIsCalenderOpen] = useState(false);
-  const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
-
-  const openCalenderModal = () => setIsCalenderOpen(true);
-  const closeCalendarModal = () => setIsCalenderOpen(false);
-  const openCustomModal = () => setIsCustomModalOpen(true);
-  const closeCustomModal = () => setIsCustomModalOpen(false);
+  const openEventsModal = () => setIsEventsModalOpen(true);
+  const closeEventsModal = () => {
+    setShowDatesInputs(false);
+    setIsEventsModalOpen(false);
+  };
 
   useEffect(() => {
     saveEventsToLocalStorage(events);
@@ -43,7 +42,7 @@ const CalendarBody = () => {
       allDay: selectInfo.allDay,
     });
     setEventTitle("");
-    openCalenderModal();
+    openEventsModal();
   }, []);
 
   const handleInputChange = (e) => {
@@ -60,7 +59,7 @@ const CalendarBody = () => {
       allDay: true,
     };
     setEvents((prevEvents) => [...prevEvents, eventToAdd]);
-    closeCalendarModal();
+    closeEventsModal();
     setNewEvent({ title: "", start: "", end: "" }); // Reset input fields
   };
 
@@ -75,7 +74,7 @@ const CalendarBody = () => {
       allDay,
     });
     setEventTitle(title);
-    openCalenderModal();
+    openEventsModal();
   }, []);
 
   const handleSaveEvent = () => {
@@ -93,31 +92,31 @@ const CalendarBody = () => {
       return [...updatedEvents, newEvent];
     });
 
-    closeCalendarModal();
+    closeEventsModal();
   };
 
   const handleDeleteEvent = () => {
     setEvents((prevEvents) =>
       prevEvents.filter((event) => event.id !== currentEvent.id)
     );
-    closeCalendarModal();
+    closeEventsModal();
   };
 
   const handleCreateNewEvent = () => {
-    const newEvent = {
-      id: Date.now().toString(),
-      title: "New Event",
-      start: new Date(),
-      allDay: true,
-    };
-    setEvents((prevEvents) => [...prevEvents, newEvent]);
+    // const newEvent = {
+    //   id: Date.now().toString(),
+    //   title: "New Event",
+    //   start: new Date(),
+    //   allDay: true,
+    // };
+    // setEvents((prevEvents) => [...prevEvents, newEvent]);
+    setShowDatesInputs(true);
+    openEventsModal();
   };
-
-  console.log(isCalenderOpen, isCustomModalOpen);
 
   return (
     <>
-      <Header handleCreateNewEvent={openCustomModal} />
+      <Header handleCreateNewEvent={handleCreateNewEvent} />
       <FullCalendar
         ref={calendarRef}
         headerToolbar={{
@@ -136,24 +135,18 @@ const CalendarBody = () => {
         timeZone="UTC"
       />
 
-      {/* Modal for Add/Edit Event on calender click */}
-      <CalenderModal
-        isModalOpen={isCalenderOpen}
+      <EventsModal
+        isOpen={isEventsModalOpen}
+        onClose={closeEventsModal}
         currentEvent={currentEvent}
         eventTitle={eventTitle}
-        handleSaveEvent={handleSaveEvent}
-        handleDeleteEvent={handleDeleteEvent}
-        closeModal={closeCalendarModal}
         setEventTitle={setEventTitle}
-      />
-
-      {/* Modal for Add Event from nav button */}
-      <CustomEventModal
-        isModalOpen={isCustomModalOpen}
-        closeModal={closeCustomModal}
+        handleDeleteEvent={handleDeleteEvent}
+        handleSaveEvent={handleSaveEvent}
+        showDatesInput={showDatesInputs}
         handleInputChange={handleInputChange}
-        newEvent={newEvent}
         handleAddEvent={handleAddEvent}
+        newEvent={newEvent}
       />
     </>
   );
