@@ -1,4 +1,5 @@
 import React from "react";
+import "./styles.css";
 import Modal from "../Modal";
 
 const EventsModal = ({
@@ -12,25 +13,27 @@ const EventsModal = ({
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <>
-        <h3>
-          {currentEvent && currentEvent.title ? "Edit Event" : "Add Event"}
-        </h3>
+      <div className="events-modal-container">
         <input
           type="text"
           name="title"
           value={eventTitle}
           onChange={(e) => setEventTitle(e.target.value)}
-          placeholder="Enter event title"
+          placeholder="Add title"
+          className="title"
         />
         <div className="modal-actions">
-          <button onClick={handleSaveEvent}>Save</button>
           {currentEvent && currentEvent.title && (
             <button onClick={handleDeleteEvent}>Delete</button>
           )}
-          <button onClick={onClose}>Cancel</button>
+          <button onClick={onClose} className="btn btn-secondary">
+            Cancel
+          </button>
+          <button onClick={handleSaveEvent} className="btn btn-primary">
+            Save
+          </button>
         </div>
-      </>
+      </div>
     </Modal>
   );
 };
