@@ -68,8 +68,7 @@ const EventsModal = ({
 
   const formatDateForInput = (date) => {
     if (!date) return "";
-    const d = new Date(date);
-    return d.toISOString().slice(0, 16); // Returns YYYY-MM-DDTHH:MM format
+    return date.slice(0, 16);
   };
 
   return (

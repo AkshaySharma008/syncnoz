@@ -50,12 +50,12 @@ const CalendarBody = () => {
   const handleEventClick = useCallback((clickInfo) => {
     const { reminder, category } = clickInfo.event.extendedProps;
 
-    const { id, start, end, allDay, title } = clickInfo.event;
+    const { id, startStr, endStr, allDay, title } = clickInfo.event;
 
     setCurrentEvent({
       id,
-      start,
-      end,
+      start: startStr,
+      end: endStr,
       allDay,
       title,
       extendedProps: {
@@ -126,6 +126,7 @@ const CalendarBody = () => {
         longPressDelay={1}
         eventDrop={handleEventDrop}
         displayEventTime={true}
+        timeZone="local"
         eventContent={(eventInfo) => (
           <CustomEvent customEvent={eventInfo.event} />
         )} // Custom rendering of events
