@@ -10,6 +10,8 @@ const EventModal = ({
   closeModal,
   setEventTitle,
 }) => {
+  if (!isModalOpen) return null;
+
   return (
     <div className={`modal-overlay ${isModalOpen ? "active" : ""}`}>
       <div className="modal">

@@ -9,6 +9,7 @@ import {
   saveEventsToLocalStorage,
   getAllEventsFromLocalStorage,
 } from "../../utils/localStorage.utils";
+import Header from "../Header";
 
 const CalendarBody = () => {
   const [events, setEvents] = useState(() => {
@@ -78,8 +79,13 @@ const CalendarBody = () => {
     setIsModalOpen(false);
   };
 
+  const handleCreateNewEvent = () => {
+    console.log("handleCreateNewEvent");
+  };
+
   return (
     <>
+      <Header handleCreateNewEvent={handleCreateNewEvent} />
       <FullCalendar
         headerToolbar={{
           left: "prev,next today",
