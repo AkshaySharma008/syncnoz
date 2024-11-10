@@ -62,7 +62,7 @@ const CalendarBody = () => {
       title: newEvent.title,
       start: newEvent.start,
       end: newEvent.end,
-      allDay: true,
+      allDay: false,
     };
     setEvents((prevEvents) => [...prevEvents, eventToAdd]);
     closeCustomEventsModal();
@@ -109,14 +109,24 @@ const CalendarBody = () => {
   };
 
   const handleCreateNewEvent = () => {
-    // const newEvent = {
-    //   id: Date.now().toString(),
-    //   title: "New Event",
-    //   start: new Date(),
-    //   allDay: true,
-    // };
-    // setEvents((prevEvents) => [...prevEvents, newEvent]);
     openCustomEventsModal();
+  };
+
+  // Handle event drop (drag and drop)
+  const handleEventDrop = (eventDropInfo) => {
+    const { event } = eventDropInfo;
+
+    setEvents((prevEvents) =>
+      prevEvents.map((evt) =>
+        evt.id === event.id
+          ? {
+              ...evt,
+              start: event.start,
+              end: event.end,
+            }
+          : evt
+      )
+    );
   };
 
   return (
@@ -130,7 +140,7 @@ const CalendarBody = () => {
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
+        initialView="timeGridWeek"
         selectable={true}
         editable={true}
         events={events}
@@ -138,6 +148,8 @@ const CalendarBody = () => {
         eventClick={handleEventClick}
         longPressDelay={1}
         timeZone="UTC"
+        eventDrop={handleEventDrop}
+        displayEventTime={true}
       />
 
       <EventsModal
@@ -148,6 +160,7 @@ const CalendarBody = () => {
         setEventTitle={setEventTitle}
         handleDeleteEvent={handleDeleteEvent}
         handleSaveEvent={handleSaveEvent}
+        setCurrentEvent={setCurrentEvent}
       />
 
       <CustomEventsModal
