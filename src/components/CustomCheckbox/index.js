@@ -1,24 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import "./styles.css";
 
 const CustomCheckbox = ({ label, onChange, value }) => {
-  const [checked, setChecked] = useState(value || false);
-
-  const handleCheckboxChange = () => {
-    setChecked(!checked);
-    onChange(!checked);
-  };
-
   return (
     <label className="custom-checkbox-label">
       <input
         type="checkbox"
-        checked={checked}
-        onChange={handleCheckboxChange}
+        checked={value || false}
+        onChange={(e) => onChange(e.target.checked)}
         className="custom-checkbox-input"
       />
       <span className="custom-checkbox-box">
-        {checked && <span className="custom-checkbox-checkmark">✓</span>}
+        {value && <span className="custom-checkbox-checkmark">✓</span>}
       </span>
       {label}
     </label>

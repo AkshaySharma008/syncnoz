@@ -13,19 +13,15 @@ import EventsModal from "../EventsModal";
 
 const CalendarBody = () => {
   const calendarRef = useRef(null);
-
+  const [currentEvent, setCurrentEvent] = useState(null);
+  const [isEventsModalOpen, setIsEventsModalOpen] = useState(false);
   const [events, setEvents] = useState(() => {
     const storedEvents = getAllEventsFromLocalStorage();
     return storedEvents ? storedEvents : [];
   });
-  const [currentEvent, setCurrentEvent] = useState(null);
-  const [isEventsModalOpen, setIsEventsModalOpen] = useState(false);
 
   const openEventsModal = () => setIsEventsModalOpen(true);
-
-  const closeEventsModal = () => {
-    setIsEventsModalOpen(false);
-  };
+  const closeEventsModal = () => setIsEventsModalOpen(false);
 
   useEffect(() => {
     saveEventsToLocalStorage(events);
@@ -37,18 +33,29 @@ const CalendarBody = () => {
       start: selectInfo.startStr,
       end: selectInfo.endStr,
       allDay: selectInfo.allDay,
+      extendedProps: {
+        reminder: false,
+        category: "",
+      },
     });
     openEventsModal();
   }, []);
 
   const handleEventClick = useCallback((clickInfo) => {
-    const { id, start, end, allDay } = clickInfo.event;
+    const { reminder, category } = clickInfo.event.extendedProps;
+
+    const { id, start, end, allDay, title } = clickInfo.event;
 
     setCurrentEvent({
       id,
       start,
       end,
       allDay,
+      title,
+      extendedProps: {
+        reminder,
+        category,
+      },
     });
     openEventsModal();
   }, []);

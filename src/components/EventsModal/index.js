@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles.css";
 import Modal from "../Modal";
 import CustomCheckbox from "../CustomCheckbox";
@@ -10,8 +10,10 @@ const DefaultEventData = {
   id: "",
   start: "",
   end: "",
-  reminder: false,
-  category: "",
+  extendedProps: {
+    reminder: false,
+    category: "",
+  },
 };
 
 const EventsModal = ({
@@ -23,11 +25,29 @@ const EventsModal = ({
 }) => {
   const [eventData, setEventData] = useState(DefaultEventData);
 
+  useEffect(() => {
+    if (eventInfo) {
+      setEventData(eventInfo);
+    }
+  }, [eventInfo]);
+
   const handleInputOnChange = (name, value) => {
-    setEventData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setEventData((prevData) => {
+      const updatedData = { ...prevData };
+      const keys = name.split(".");
+
+      // Use reduce to traverse and update nested properties
+      keys.reduce((acc, key, index) => {
+        if (index === keys.length - 1) {
+          acc[key] = value; // Set the final property to the value
+        } else {
+          if (!acc[key]) acc[key] = {}; // Ensure intermediate object exists
+        }
+        return acc[key];
+      }, updatedData);
+
+      return updatedData;
+    });
   };
 
   const handleSave = () => {
@@ -91,14 +111,18 @@ const EventsModal = ({
         </div>
         <CustomSelect
           options={categories}
-          value={eventData.category}
-          onChange={(value) => handleInputOnChange("category", value)}
+          value={eventData.extendedProps.category}
+          onChange={(value) =>
+            handleInputOnChange("extendedProps.category", value)
+          }
           placeholder="Select a category"
         />
         <CustomCheckbox
           label="Remind Me"
-          value={eventData.reminder}
-          onChange={(value) => handleInputOnChange("reminder", value)}
+          value={eventData.extendedProps.reminder}
+          onChange={(value) =>
+            handleInputOnChange("extendedProps.reminder", value)
+          }
         />
         <div className="modal-actions">
           {/* {currentEvent && currentEvent.title && (
