@@ -1,0 +1,73 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Modal */
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  transition: transform 0.3s ease;
+  transform: translateY(-50px);
+}
+
+.modal-overlay.active .modal {
+  transform: translateY(0);
+}
+
+/* Input field */
+.modal input {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Button styles */
+.modal-actions button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-actions button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Save Button */
+.modal-actions button:nth-child(1) {
+  background-color: #4caf50;
+  color: white;
+}
+
+.modal-actions button:nth-child(2) {
+  background-color: #f44336;
+  color: white;
+}
+
+.modal-actions button:nth-child(3) {
+  background-color: #888;
+  color: white;
+}

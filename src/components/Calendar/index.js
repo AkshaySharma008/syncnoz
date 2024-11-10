@@ -1,59 +1,79 @@
-// src/Calendar.js
-
 import React, { useState, useEffect, useCallback } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-
-const LOCAL_STORAGE_KEY = "syncNozEvents";
+import "./styles.css";
+import EventModal from "../EventModal";
+import {
+  saveEventsToLocalStorage,
+  getAllEventsFromLocalStorage,
+} from "../../utils/localStorage.utils";
 
 const Calendar = () => {
   const [events, setEvents] = useState(() => {
-    // Load events from localStorage during initial render
-    const storedEvents = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const storedEvents = getAllEventsFromLocalStorage();
     return storedEvents ? JSON.parse(storedEvents) : [];
   });
 
-  // Save events to localStorage whenever `events` state changes
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState(null);
+  const [eventTitle, setEventTitle] = useState("");
+
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(events));
+    saveEventsToLocalStorage(events);
   }, [events]);
 
-  // Handle event creation when a date is selected
   const handleDateSelect = useCallback((selectInfo) => {
-    const title = prompt("Please enter a title for your event");
-    const calendarApi = selectInfo.view.calendar;
-    calendarApi.unselect(); // Clear the selection
-
-    if (title) {
-      const newEvent = {
-        id: `${selectInfo.startStr}-${selectInfo.endStr}`,
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      };
-      setEvents((prevEvents) => [...prevEvents, newEvent]);
-    }
+    setCurrentEvent({
+      id: `${selectInfo.startStr}-${selectInfo.endStr}`,
+      start: selectInfo.startStr,
+      end: selectInfo.endStr,
+      allDay: selectInfo.allDay,
+    });
+    setEventTitle("");
+    setIsModalOpen(true); // Show the modal
   }, []);
 
-  // Handle event deletion on click
   const handleEventClick = useCallback((clickInfo) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete the event '${clickInfo.event.title}'?`
-      )
-    ) {
-      setEvents((prevEvents) =>
-        prevEvents.filter((event) => event.id !== clickInfo.event.id)
-      );
-    }
+    setCurrentEvent(clickInfo.event);
+    setEventTitle(clickInfo.event.title);
+    setIsModalOpen(true); // Show the modal
   }, []);
+
+  const handleSaveEvent = () => {
+    if (eventTitle.trim() === "") return;
+
+    const newEvent = {
+      ...currentEvent,
+      title: eventTitle,
+    };
+
+    setEvents((prevEvents) => {
+      const updatedEvents = prevEvents.filter(
+        (event) => event.id !== currentEvent.id
+      );
+      return [...updatedEvents, newEvent];
+    });
+
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteEvent = () => {
+    setEvents((prevEvents) =>
+      prevEvents.filter((event) => event.id !== currentEvent.id)
+    );
+    setIsModalOpen(false);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="App">
       <h2>SyncNoz Event Calendar</h2>
+
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -62,6 +82,17 @@ const Calendar = () => {
         events={events}
         select={handleDateSelect}
         eventClick={handleEventClick}
+      />
+
+      {/* Modal for Add/Edit Event */}
+      <EventModal
+        isModalOpen={isModalOpen}
+        currentEvent={currentEvent}
+        eventTitle={eventTitle}
+        handleSaveEvent={handleSaveEvent}
+        handleDeleteEvent={handleDeleteEvent}
+        closeModal={closeModal}
+        setEventTitle={setEventTitle}
       />
     </div>
   );
