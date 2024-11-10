@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles.css";
-import { getEventsBackgroundColor } from "../../utils/eventColor.utils";
+import { getEventsBackgroundColor } from "../../../utils/eventColor.utils";
 
 const CustomEvent = ({ customEvent }) => {
   const { title } = customEvent;

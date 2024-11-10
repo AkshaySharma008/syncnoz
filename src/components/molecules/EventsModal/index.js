@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./styles.css";
-import Modal from "../Modal";
-import CustomCheckbox from "../CustomCheckbox";
-import CustomSelect from "../CustomSelect";
-import { EVENT_CATEGORIES } from "../../constants";
-import { formatToISOWithMidnightOffset } from "../../utils/dateFormat.utils";
+import Modal from "../../atoms/Modal";
+import CustomCheckbox from "../../atoms/CustomCheckbox";
+import CustomSelect from "../../atoms/CustomSelect";
+import { EVENT_CATEGORIES, DEFAULT_EVENT_DATA } from "../../../constants";
+import { formatToISOWithMidnightOffset } from "../../../utils/dateFormat.utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { DEFAULT_EVENT_DATA } from "../../constants";
 
 const EventsModal = ({
   isOpen,

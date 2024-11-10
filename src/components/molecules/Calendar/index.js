@@ -3,12 +3,12 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import Header from "../Header";
+import Header from "../../atoms/Header";
 import EventsModal from "../EventsModal";
 import CustomEvent from "../CustomEvent";
-import useEventReminders from "../../hooks/useEventReminders";
+import useEventReminders from "../../../hooks/useEventReminders";
 import "./styles.css";
-import { useCalender } from "../../hooks/useCalender";
+import { useCalender } from "../../../hooks/useCalender";
 
 const CalendarBody = () => {
   const {
