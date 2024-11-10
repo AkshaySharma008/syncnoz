@@ -21,6 +21,7 @@ const useEventReminders = (events) => {
   useEffect(() => {
     const reminderInterval = setInterval(checkForReminders, 1000); // Check every 30sec
     return () => clearInterval(reminderInterval); // Cleanup on component unmount
+    // eslint-disable-next-line
   }, [events]);
 };
 
