@@ -10,7 +10,6 @@ import {
 } from "../../utils/localStorage.utils";
 import Header from "../Header";
 import EventsModal from "../EventsModal";
-import CustomEventsModal from "../CustomEventModal";
 
 const CalendarBody = () => {
   const calendarRef = useRef(null);
@@ -21,19 +20,12 @@ const CalendarBody = () => {
   });
   const [currentEvent, setCurrentEvent] = useState(null);
   const [eventTitle, setEventTitle] = useState("");
-  const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
   const [isEventsModalOpen, setIsEventsModalOpen] = useState(false);
-  const [isCustomEventsModalOpen, setIsCustomEventsModalOpen] = useState(false);
 
   const openEventsModal = () => setIsEventsModalOpen(true);
-  const openCustomEventsModal = () => setIsCustomEventsModalOpen(true);
 
   const closeEventsModal = () => {
     setIsEventsModalOpen(false);
-  };
-
-  const closeCustomEventsModal = () => {
-    setIsCustomEventsModalOpen(false);
   };
 
   useEffect(() => {
@@ -51,28 +43,9 @@ const CalendarBody = () => {
     openEventsModal();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewEvent({ ...newEvent, [name]: value });
-  };
-
-  const handleAddEvent = () => {
-    const eventToAdd = {
-      id: Date.now().toString(),
-      title: newEvent.title,
-      start: newEvent.start,
-      end: newEvent.end,
-      allDay: false,
-    };
-    setEvents((prevEvents) => [...prevEvents, eventToAdd]);
-    closeCustomEventsModal();
-    setNewEvent({ title: "", start: "", end: "" }); // Reset input fields
-  };
-
   const handleEventClick = useCallback((clickInfo) => {
     const { id, title, start, end, allDay } = clickInfo.event;
 
-    // Avoid passing complex event object directly
     setCurrentEvent({
       id,
       start,
@@ -108,10 +81,6 @@ const CalendarBody = () => {
     closeEventsModal();
   };
 
-  const handleCreateNewEvent = () => {
-    openCustomEventsModal();
-  };
-
   // Handle event drop (drag and drop)
   const handleEventDrop = (eventDropInfo) => {
     const { event } = eventDropInfo;
@@ -127,6 +96,12 @@ const CalendarBody = () => {
           : evt
       )
     );
+  };
+
+  const handleCreateNewEvent = () => {
+    setCurrentEvent(null);
+    setEventTitle("");
+    openEventsModal();
   };
 
   return (
@@ -147,7 +122,7 @@ const CalendarBody = () => {
         select={handleDateSelect}
         eventClick={handleEventClick}
         longPressDelay={1}
-        timeZone="UTC"
+        timeZone="ISO"
         eventDrop={handleEventDrop}
         displayEventTime={true}
       />
@@ -161,14 +136,6 @@ const CalendarBody = () => {
         handleDeleteEvent={handleDeleteEvent}
         handleSaveEvent={handleSaveEvent}
         setCurrentEvent={setCurrentEvent}
-      />
-
-      <CustomEventsModal
-        isOpen={isCustomEventsModalOpen}
-        onClose={closeCustomEventsModal}
-        handleInputChange={handleInputChange}
-        handleAddEvent={handleAddEvent}
-        newEvent={newEvent}
       />
     </>
   );
