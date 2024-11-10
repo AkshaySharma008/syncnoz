@@ -1,0 +1,21 @@
+@media (max-width: 800px) {
+  .fc {
+    font-size: 0.9em;
+  }
+
+  .fc-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .fc-toolbar-center {
+    order: 1;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .fc-toolbar {
+    flex-direction: column;
+  }
+}

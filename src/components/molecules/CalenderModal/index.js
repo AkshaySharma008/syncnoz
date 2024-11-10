@@ -1,7 +1,7 @@
 import React from "react";
-import "./styles.css";
+import Modal from "../../atoms/Modal";
 
-const EventModal = ({
+const CalenderModal = ({
   isModalOpen,
   currentEvent,
   eventTitle,
@@ -10,11 +10,9 @@ const EventModal = ({
   closeModal,
   setEventTitle,
 }) => {
-  if (!isModalOpen) return null;
-
   return (
-    <div className={`modal-overlay ${isModalOpen ? "active" : ""}`}>
-      <div className="modal">
+    <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <>
         <h3>
           {currentEvent && currentEvent.title ? "Edit Event" : "Add Event"}
         </h3>
@@ -31,9 +29,9 @@ const EventModal = ({
           )}
           <button onClick={closeModal}>Cancel</button>
         </div>
-      </div>
-    </div>
+      </>
+    </Modal>
   );
 };
 
-export default EventModal;
+export default CalenderModal;
