@@ -1,5 +1,5 @@
 import React from "react";
-import CalendarBody from "../../molecules/Calendar";
+import CalendarBody from "../../organisms/Calendar";
 import "./styles.css";
 import Footer from "../../atoms/Footer";
 
