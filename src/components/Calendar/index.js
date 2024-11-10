@@ -9,7 +9,8 @@ import {
   getAllEventsFromLocalStorage,
 } from "../../utils/localStorage.utils";
 import Header from "../Header";
-import EventsModal from "../molecules/EventsModal";
+import EventsModal from "../EventsModal";
+import CustomEventsModal from "../CustomEventModal";
 
 const CalendarBody = () => {
   const calendarRef = useRef(null);
@@ -22,12 +23,17 @@ const CalendarBody = () => {
   const [eventTitle, setEventTitle] = useState("");
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
   const [isEventsModalOpen, setIsEventsModalOpen] = useState(false);
-  const [showDatesInputs, setShowDatesInputs] = useState(false);
+  const [isCustomEventsModalOpen, setIsCustomEventsModalOpen] = useState(false);
 
   const openEventsModal = () => setIsEventsModalOpen(true);
+  const openCustomEventsModal = () => setIsCustomEventsModalOpen(true);
+
   const closeEventsModal = () => {
-    setShowDatesInputs(false);
     setIsEventsModalOpen(false);
+  };
+
+  const closeCustomEventsModal = () => {
+    setIsCustomEventsModalOpen(false);
   };
 
   useEffect(() => {
@@ -59,7 +65,7 @@ const CalendarBody = () => {
       allDay: true,
     };
     setEvents((prevEvents) => [...prevEvents, eventToAdd]);
-    closeEventsModal();
+    closeCustomEventsModal();
     setNewEvent({ title: "", start: "", end: "" }); // Reset input fields
   };
 
@@ -110,8 +116,7 @@ const CalendarBody = () => {
     //   allDay: true,
     // };
     // setEvents((prevEvents) => [...prevEvents, newEvent]);
-    setShowDatesInputs(true);
-    openEventsModal();
+    openCustomEventsModal();
   };
 
   return (
@@ -143,7 +148,11 @@ const CalendarBody = () => {
         setEventTitle={setEventTitle}
         handleDeleteEvent={handleDeleteEvent}
         handleSaveEvent={handleSaveEvent}
-        showDatesInput={showDatesInputs}
+      />
+
+      <CustomEventsModal
+        isOpen={isCustomEventsModalOpen}
+        onClose={closeCustomEventsModal}
         handleInputChange={handleInputChange}
         handleAddEvent={handleAddEvent}
         newEvent={newEvent}
