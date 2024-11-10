@@ -19,7 +19,6 @@ const CalendarBody = () => {
     return storedEvents ? storedEvents : [];
   });
   const [currentEvent, setCurrentEvent] = useState(null);
-  const [eventTitle, setEventTitle] = useState("");
   const [isEventsModalOpen, setIsEventsModalOpen] = useState(false);
 
   const openEventsModal = () => setIsEventsModalOpen(true);
@@ -39,12 +38,11 @@ const CalendarBody = () => {
       end: selectInfo.endStr,
       allDay: selectInfo.allDay,
     });
-    setEventTitle("");
     openEventsModal();
   }, []);
 
   const handleEventClick = useCallback((clickInfo) => {
-    const { id, title, start, end, allDay } = clickInfo.event;
+    const { id, start, end, allDay } = clickInfo.event;
 
     setCurrentEvent({
       id,
@@ -52,23 +50,15 @@ const CalendarBody = () => {
       end,
       allDay,
     });
-    setEventTitle(title);
     openEventsModal();
   }, []);
 
-  const handleSaveEvent = () => {
-    if (eventTitle.trim() === "") return;
-
-    const newEvent = {
-      ...currentEvent,
-      title: eventTitle,
-    };
-
+  const handleSaveEvent = (eventData) => {
     setEvents((prevEvents) => {
       const updatedEvents = prevEvents.filter(
-        (event) => event.id !== currentEvent.id
+        (event) => event.id !== eventData.id
       );
-      return [...updatedEvents, newEvent];
+      return [...updatedEvents, eventData];
     });
 
     closeEventsModal();
@@ -100,7 +90,6 @@ const CalendarBody = () => {
 
   const handleCreateNewEvent = () => {
     setCurrentEvent(null);
-    setEventTitle("");
     openEventsModal();
   };
 
@@ -122,7 +111,6 @@ const CalendarBody = () => {
         select={handleDateSelect}
         eventClick={handleEventClick}
         longPressDelay={1}
-        timeZone="ISO"
         eventDrop={handleEventDrop}
         displayEventTime={true}
       />
@@ -130,12 +118,9 @@ const CalendarBody = () => {
       <EventsModal
         isOpen={isEventsModalOpen}
         onClose={closeEventsModal}
-        currentEvent={currentEvent}
-        eventTitle={eventTitle}
-        setEventTitle={setEventTitle}
+        eventInfo={currentEvent}
         handleDeleteEvent={handleDeleteEvent}
         handleSaveEvent={handleSaveEvent}
-        setCurrentEvent={setCurrentEvent}
       />
     </>
   );

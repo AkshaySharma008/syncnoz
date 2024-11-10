@@ -5,38 +5,51 @@ import CustomCheckbox from "../CustomCheckbox";
 import CustomSelect from "../CustomSelect";
 
 const categories = ["Work", "Personal", "Fitness", "Shopping"];
+const DefaultEventData = {
+  title: "",
+  id: "",
+  start: "",
+  end: "",
+  reminder: false,
+  category: "",
+};
 
 const EventsModal = ({
   isOpen,
   onClose,
-  currentEvent,
-  eventTitle,
-  setEventTitle,
+  eventInfo,
   handleDeleteEvent,
   handleSaveEvent,
-  setCurrentEvent,
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [eventData, setEventData] = useState(DefaultEventData);
 
-  const formatDateForInput = (date) => {
-    return date ? new Date(date).toISOString().slice(0, 16) : "";
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCurrentEvent((prevEvent) => ({
-      ...prevEvent,
-      [name]: new Date(value).toISOString(),
+  const handleInputOnChange = (name, value) => {
+    setEventData((prevData) => ({
+      ...prevData,
+      [name]: value,
     }));
   };
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-    // Handle further logic for category selection here
+  const handleSave = () => {
+    const { start, end, title } = eventData;
+
+    if (!title || !start || !end) {
+      alert("Please fill in all fields!!!");
+      return;
+    }
+
+    if (end < start) {
+      alert("End time cannot be before start time!");
+      return;
+    }
+
+    handleSaveEvent(eventData);
   };
 
-  const handleReminderChange = () => {
-    console.log("remind");
+  const formatDateForInput = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    return d.toISOString().slice(0, 16); // Returns YYYY-MM-DDTHH:MM format
   };
 
   return (
@@ -45,8 +58,8 @@ const EventsModal = ({
         <input
           type="text"
           name="title"
-          value={eventTitle}
-          onChange={(e) => setEventTitle(e.target.value)}
+          value={eventData.title}
+          onChange={(e) => handleInputOnChange(e.target.name, e.target.value)}
           placeholder="Add title"
           className="title"
         />
@@ -56,8 +69,10 @@ const EventsModal = ({
             <input
               type="datetime-local"
               name="start"
-              value={formatDateForInput(currentEvent?.start)}
-              onChange={handleInputChange}
+              value={formatDateForInput(eventData.start)}
+              onChange={(e) =>
+                handleInputOnChange(e.target.name, e.target.value)
+              }
               className="date-input"
             />
           </div>
@@ -66,26 +81,33 @@ const EventsModal = ({
             <input
               type="datetime-local"
               name="end"
-              value={formatDateForInput(currentEvent?.end)}
-              onChange={handleInputChange}
+              value={formatDateForInput(eventData.end)}
+              onChange={(e) =>
+                handleInputOnChange(e.target.name, e.target.value)
+              }
               className="date-input"
             />
           </div>
         </div>
         <CustomSelect
           options={categories}
-          onChange={handleCategoryChange}
+          value={eventData.category}
+          onChange={(value) => handleInputOnChange("category", value)}
           placeholder="Select a category"
         />
-        <CustomCheckbox label="Remind Me" onChange={handleReminderChange} />
+        <CustomCheckbox
+          label="Remind Me"
+          value={eventData.reminder}
+          onChange={(value) => handleInputOnChange("reminder", value)}
+        />
         <div className="modal-actions">
-          {currentEvent && currentEvent.title && (
+          {/* {currentEvent && currentEvent.title && (
             <button onClick={handleDeleteEvent}>Delete</button>
-          )}
+          )} */}
           <button onClick={onClose} className="btn btn-secondary">
             Cancel
           </button>
-          <button onClick={handleSaveEvent} className="btn btn-primary">
+          <button onClick={handleSave} className="btn btn-primary">
             Save
           </button>
         </div>

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./styles.css";
 
-const CustomCheckbox = ({ label, onChange }) => {
-  const [checked, setChecked] = useState(false);
+const CustomCheckbox = ({ label, onChange, value }) => {
+  const [checked, setChecked] = useState(value || false);
 
   const handleCheckboxChange = () => {
     setChecked(!checked);

@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import "./styles.css";
 
 const CustomSelect = ({
+  value,
   options,
   onChange,
   placeholder = "Select a category",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(value || null);
 
   const handleToggleDropdown = () => {
     setIsOpen(!isOpen);
