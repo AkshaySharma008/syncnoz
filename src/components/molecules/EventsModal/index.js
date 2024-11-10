@@ -16,9 +16,11 @@ const EventsModal = ({
   handleSaveEvent,
 }) => {
   const [eventData, setEventData] = useState(DEFAULT_EVENT_DATA);
+  const [showDeleteOption, setShowDeleteOption] = useState(false);
 
   useEffect(() => {
     if (eventInfo) {
+      if (eventInfo.title) setShowDeleteOption(true);
       if (eventInfo.allDay) {
         setEventData({
           ...eventInfo,
@@ -66,13 +68,18 @@ const EventsModal = ({
     handleSaveEvent(eventData);
   };
 
+  const handleClose = () => {
+    setEventData(DEFAULT_EVENT_DATA);
+    onClose();
+  };
+
   const formatDateForInput = (date) => {
     if (!date) return "";
     return date.slice(0, 16);
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleClose}>
       <div className="events-modal-container">
         <input
           type="text"
@@ -124,14 +131,14 @@ const EventsModal = ({
           }
         />
         <div className="modal-actions">
-          {eventData && eventData.id && (
+          {showDeleteOption && (
             <button onClick={handleDeleteEvent} className="btn btn-warning">
               <FontAwesomeIcon icon={faTrashAlt} size="sm" color="red" /> Delete
             </button>
           )}
 
           <div className="modal-right-action">
-            <button onClick={onClose} className="btn btn-secondary">
+            <button onClick={handleClose} className="btn btn-secondary">
               Cancel
             </button>
             <button onClick={handleSave} className="btn btn-primary">

@@ -35,6 +35,9 @@ const CalendarBody = () => {
           center: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
+        footerToolbar={{
+          left: "prevYear,prev,next,nextYear today",
+        }}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
         selectable={true}
