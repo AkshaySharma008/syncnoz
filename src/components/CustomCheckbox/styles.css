@@ -1,0 +1,28 @@
+.custom-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  margin-top: 0.5rem;
+}
+
+.custom-checkbox-input {
+  display: none;
+}
+
+.custom-checkbox-box {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-checkbox-checkmark {
+  color: #007bff;
+  font-size: 14px;
+}

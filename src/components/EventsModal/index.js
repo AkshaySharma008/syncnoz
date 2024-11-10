@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styles.css";
 import Modal from "../Modal";
+import CustomCheckbox from "../CustomCheckbox";
+import CustomSelect from "../CustomSelect";
+
+const categories = ["Work", "Personal", "Fitness", "Shopping"];
 
 const EventsModal = ({
   isOpen,
@@ -12,6 +16,8 @@ const EventsModal = ({
   handleSaveEvent,
   setCurrentEvent,
 }) => {
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const formatDateForInput = (date) => {
     return date ? new Date(date).toISOString().slice(0, 16) : "";
   };
@@ -22,6 +28,15 @@ const EventsModal = ({
       ...prevEvent,
       [name]: new Date(value).toISOString(),
     }));
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    // Handle further logic for category selection here
+  };
+
+  const handleReminderChange = () => {
+    console.log("remind");
   };
 
   return (
@@ -57,6 +72,12 @@ const EventsModal = ({
             />
           </div>
         </div>
+        <CustomSelect
+          options={categories}
+          onChange={handleCategoryChange}
+          placeholder="Select a category"
+        />
+        <CustomCheckbox label="Remind Me" onChange={handleReminderChange} />
         <div className="modal-actions">
           {currentEvent && currentEvent.title && (
             <button onClick={handleDeleteEvent}>Delete</button>
