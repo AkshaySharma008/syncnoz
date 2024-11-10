@@ -9,8 +9,8 @@ export const saveEventsToLocalStorage = (events) => {
     end: event.end,
     allDay: event.allDay,
     extendedProps: {
-      reminder: event.extendedProps.reminder,
-      category: event.extendedProps.category,
+      reminder: event?.extendedProps?.reminder,
+      category: event?.extendedProps?.category,
     },
   }));
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(eventsToStore));
