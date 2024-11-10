@@ -49,6 +49,7 @@ const CalendarBody = () => {
         eventContent={(eventInfo) => (
           <CustomEvent customEvent={eventInfo.event} />
         )}
+        themeSystem="Cyborg"
       />
 
       <EventsModal

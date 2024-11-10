@@ -1,3 +1,8 @@
+.fc-v-event {
+  border: none;
+  background-color: transparent;
+}
+
 @media (max-width: 800px) {
   .fc {
     font-size: 0.9em;
@@ -12,11 +17,6 @@
     width: 100%;
     justify-content: center;
   }
-}
-
-.fc-v-event {
-  border: none;
-  background-color: transparent;
 }
 
 @media (max-width: 600px) {
