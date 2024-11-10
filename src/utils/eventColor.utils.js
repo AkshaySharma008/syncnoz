@@ -10,6 +10,9 @@ export const getEventsBackgroundColor = (category) => {
     case "Reminder":
       color = "lightcyan";
       break;
+    default:
+      color = "lightblue";
+      break;
   }
 
   return color;

@@ -3,7 +3,7 @@ import "./styles.css";
 import { getEventsBackgroundColor } from "../../utils/eventColor.utils";
 
 const CustomEvent = ({ customEvent }) => {
-  const { title, start } = customEvent;
+  const { title } = customEvent;
   const { category } = customEvent.extendedProps;
   return (
     <div

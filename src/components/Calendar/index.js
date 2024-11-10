@@ -11,15 +11,20 @@ import {
 import Header from "../Header";
 import EventsModal from "../EventsModal";
 import CustomEvent from "../CustomEvent";
+import useEventReminders from "../../hooks/useEventReminders";
 
 const CalendarBody = () => {
   const calendarRef = useRef(null);
+
   const [currentEvent, setCurrentEvent] = useState(null);
   const [isEventsModalOpen, setIsEventsModalOpen] = useState(false);
   const [events, setEvents] = useState(() => {
     const storedEvents = getAllEventsFromLocalStorage();
     return storedEvents ? storedEvents : [];
   });
+
+  // To show reminders 1 min ago.
+  useEventReminders(events);
 
   const openEventsModal = () => setIsEventsModalOpen(true);
   const closeEventsModal = () => setIsEventsModalOpen(false);
